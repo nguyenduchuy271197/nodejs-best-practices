@@ -1,0 +1,31 @@
+GET http://localhost:3000/
+
+
+###
+POST http://localhost:3000/v1/auth/register
+content-type: application/json
+
+{
+    "username": "huynguyen",
+    "email": "huynguyen111@gmail.com",
+    "password": "huynguyen"
+}
+
+
+###
+POST http://localhost:3000/v1/auth/login
+content-type: application/json
+
+{
+    "email": "huynguyen111@gmail.com",
+    "password": "huynguyen"
+}
+
+###
+POST http://localhost:3000/v1/auth/logout
+content-type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIwMzg4MzA5MGZjMzU3ZDViZmVmMTYiLCJpYXQiOjE2NTU3NzU4MDMsImV4cCI6MTY1NTc3NjcwMywidHlwZSI6IlJFRlJFU0gifQ.GVEOEJJMwWt27ggKlfB757mqtA-bl7fWZRS5ynEExOc" 
+}
+
