@@ -1,6 +1,8 @@
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNDk5ZTNiZjYzOWYxZDMyODRkZDQiLCJpYXQiOjE2NTU3OTQ4MzUsImV4cCI6MTY1NTc5NTQzNSwidHlwZSI6IkFDQ0VTUyJ9.mMDgL_0FH8qNBr3o_99kl3JfSIvr-Fr2vH-pyWt4wsA
+@host=http://localhost:3000
+@userId=62b1499e3bf639f1d3284dd4
 
-POST http://localhost:3000/v1/auth/register
-content-type: application/json
+POST {{host}}/v1/auth/register
 
 {
     "username": "huynguyen",
@@ -10,8 +12,7 @@ content-type: application/json
 
 
 ###
-POST http://localhost:3000/v1/auth/login
-content-type: application/json
+POST {{host}}/v1/auth/login
 
 {
     "email": "huynguyen1111@gmail.com",
@@ -19,19 +20,44 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:3000/v1/auth/logout
-content-type: application/json
+POST {{host}}/v1/auth/logout
 
 {
     "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIwMzg4MzA5MGZjMzU3ZDViZmVmMTYiLCJpYXQiOjE2NTU3NzU4MDMsImV4cCI6MTY1NTc3NjcwMywidHlwZSI6IlJFRlJFU0gifQ.GVEOEJJMwWt27ggKlfB757mqtA-bl7fWZRS5ynEExOc" 
 }
 
 ###
-GET http://localhost:3000/v1/users
-content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNDk5ZTNiZjYzOWYxZDMyODRkZDQiLCJpYXQiOjE2NTU3ODgzNTIsImV4cCI6MTY1NTc4ODk1MiwidHlwZSI6IkFDQ0VTUyJ9.1gOZ7Sy8OGIykIIj9I20OwI5s-q9JtH6I5vI3MAtI74
+GET {{host}}/v1/users
+Authorization: Bearer {{token}}
+
 
 ###
-GET http://localhost:3000/v1/users/62b03883090fc357d5bfef16
-content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNDk5ZTNiZjYzOWYxZDMyODRkZDQiLCJpYXQiOjE2NTU3ODgzNTIsImV4cCI6MTY1NTc4ODk1MiwidHlwZSI6IkFDQ0VTUyJ9.1gOZ7Sy8OGIykIIj9I20OwI5s-q9JtH6I5vI3MAtI74
+POST {{host}}/v1/users
+Authorization: Bearer {{token}}
+
+{
+    "username": "tynguyen",
+    "email": "tynguyen@gmail.com",
+    "password": "tynguyen",
+    "role": "user"
+}
+
+###
+GET {{host}}/v1/users/{{userId}}
+Authorization: Bearer {{token}}
+
+
+###
+PATCH {{host}}/v1/users/{{userId}}
+Authorization: Bearer {{token}}
+
+{
+    "username": "tynguyen123",
+    "email": "tynguyen123@gmail.com",
+    "password": "tynguyen123"
+}
+
+
+###
+DELETE {{host}}/v1/users/{{userId}}
+Authorization: Bearer {{token}}

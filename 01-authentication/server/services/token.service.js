@@ -2,6 +2,8 @@ const moment = require("moment");
 const config = require("../config/config");
 const jwt = require("jsonwebtoken");
 const { Token } = require("../models");
+const ApiError = require("../utils/ApiError");
+const httpStatus = require("http-status");
 
 class TokenService {
   /**
@@ -23,6 +25,15 @@ class TokenService {
     return jwt.sign(payload, secret);
   }
 
+  /**
+   * Save refresh token
+   * @param {string} token
+   * @param {ObjectId} userId
+   * @param {Moment} expires
+   * @param {string} type
+   * @param {bool} [blacklisted]
+   * @returns {Promise<Token>}
+   */
   saveToken(token, userId, expires, type, blacklisted = false) {
     return Token.create({
       token,
@@ -34,7 +45,7 @@ class TokenService {
   }
 
   /**
-   * Create a user
+   * Generate access and refresh tokens
    * @param {Object} user
    * @returns {Object}
    */
@@ -67,6 +78,25 @@ class TokenService {
         expires: refreshTokenExpires.toDate(),
       },
     };
+  }
+
+  /**
+   * Verify token
+   * @param {Object} user
+   * @returns {Object}
+   */
+  async verifyToken(token, type) {
+    const payload = jwt.verify(token, config.jwt.secret);
+    const tokenDoc = await Token.findOne({
+      token,
+      user: payload.sub,
+      type,
+      blacklisted: false,
+    });
+
+    if (!tokenDoc) throw new Error("Token not found");
+
+    return tokenDoc;
   }
 }
 

@@ -9,7 +9,7 @@ class AuthController {
     res.status(httpStatus.CREATED).send({ user });
   }
 
-  async login(req, res, next) {
+  async login(req, res) {
     // Login with email and password
     const user = await authService.loginUserWithEmailAndPassword(req.body);
 
@@ -19,9 +19,14 @@ class AuthController {
     res.send({ user, tokens });
   }
 
-  async logout(req, res, next) {
+  async logout(req, res) {
     await authService.logout(req.body.refreshToken);
     res.status(httpStatus.NO_CONTENT).send();
+  }
+
+  async refreshTokens(req, res) {
+    const tokens = await tokenService.refreshAuth(req.body.refreshToken);
+    res.send(tokens);
   }
 }
 

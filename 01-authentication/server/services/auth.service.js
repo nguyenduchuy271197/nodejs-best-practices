@@ -1,6 +1,8 @@
 const httpStatus = require("http-status");
 const { User, Token } = require("../models");
 const ApiError = require("../utils/ApiError");
+const tokenService = require("./token.service");
+const userService = require("./user.service");
 
 class AuthService {
   /**
@@ -35,6 +37,25 @@ class AuthService {
       throw new ApiError(httpStatus.NOT_FOUND, "Not Found");
     }
     await refreshTokenDoc.remove();
+  }
+
+  /**
+   * Refresh token
+   * @param {string} refreshToken
+   * @returns {Object}
+   */
+  async refreshAuth(refreshToken) {
+    try {
+      const refreshTokenDoc = tokenService.verifyToken(refreshToken, "REFRESH");
+      const user = await userService.getUserById(refreshTokenDoc.user);
+
+      if (!user) throw new Error();
+      await refreshTokenDoc.remove();
+
+      return tokenService.generateAuthTokens(user);
+    } catch (error) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, "Please Authenticate");
+    }
   }
 }
 

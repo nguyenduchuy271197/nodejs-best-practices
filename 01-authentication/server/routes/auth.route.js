@@ -9,6 +9,11 @@ router.post(
   validate(authValidation.register),
   authController.register
 );
-router.post("/logout", authController.logout);
+router.post("/logout", validate(authValidation.logout), authController.logout);
+router.post(
+  "/refresh-token",
+  validate(authValidation.refreshTokens),
+  authController.refreshTokens
+);
 
 module.exports = router;

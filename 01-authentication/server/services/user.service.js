@@ -16,11 +16,22 @@ class UserService {
     return User.create(userBody);
   }
 
+  /**
+   * Create a user
+   * @param {Object} filter
+   * @param {Object} options
+   * @returns {Promise<User>}
+   */
   async queryUsers(filter, options) {
     const users = await User.paginate(filter, options);
     return users;
   }
 
+  /**
+   * Create a user
+   * @param {string} userId
+   * @returns {Promise<User>}
+   */
   async getUserById(userId) {
     const user = await User.findById(userId);
 
@@ -28,6 +39,35 @@ class UserService {
       throw new ApiError(httpStatus.NOT_FOUND, "Not Found");
     }
     return user;
+  }
+
+  /**
+   * Update a user
+   * @param {string} userId
+   * @param {Object} userBody
+   * @returns {Promise<User>}
+   */
+  async updateUserById(userId, updateBody) {
+    const user = await this.getUserById(userId);
+
+    if (updateBody.email && (await User.isEmailTaken(updateBody.email))) {
+      throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
+    }
+
+    Object.assign(user, updateBody);
+    await user.save();
+
+    return user;
+  }
+
+  /**
+   * Delete a user
+   * @param {string} userId
+   * @returns
+   */
+  async deleteUserById(userId) {
+    const user = await this.getUserById(userId);
+    await user.remove();
   }
 }
 
