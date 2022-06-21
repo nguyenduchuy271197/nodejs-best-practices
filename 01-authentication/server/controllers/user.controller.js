@@ -5,8 +5,13 @@ class UserController {
   async getUsers(req, res) {
     const filter = pick(req.query, ["name", "role"]);
     const options = pick(req.query, ["sortBy", "limit", "page"]);
-    const result = userService.queryUsers(filter, options);
+    const result = await userService.queryUsers(filter, options);
     res.send(result);
+  }
+
+  async getUser(req, res) {
+    const user = await userService.getUserById(req.params.userId);
+    res.send(user);
   }
 }
 

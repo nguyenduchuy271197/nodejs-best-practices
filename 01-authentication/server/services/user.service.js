@@ -20,6 +20,15 @@ class UserService {
     const users = await User.paginate(filter, options);
     return users;
   }
+
+  async getUserById(userId) {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, "Not Found");
+    }
+    return user;
+  }
 }
 
 module.exports = new UserService();
