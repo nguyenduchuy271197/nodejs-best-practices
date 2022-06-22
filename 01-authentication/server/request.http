@@ -1,8 +1,10 @@
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNDk5ZTNiZjYzOWYxZDMyODRkZDQiLCJpYXQiOjE2NTU3OTQ4MzUsImV4cCI6MTY1NTc5NTQzNSwidHlwZSI6IkFDQ0VTUyJ9.mMDgL_0FH8qNBr3o_99kl3JfSIvr-Fr2vH-pyWt4wsA
+@accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNTA5NTQ3MzM4ZDg4Y2VjM2EzNDIiLCJpYXQiOjE2NTU4MDI1NTAsImV4cCI6MTY1NTgwMzE1MCwidHlwZSI6IkFDQ0VTUyJ9.zYSbb3bppRZ_85H4sThhbgz536Im4QMaqZUb8P9rnnU
+@refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNTA5NTQ3MzM4ZDg4Y2VjM2EzNDIiLCJpYXQiOjE2NTU4MDI2ODAsImV4cCI6MTY1NTgwMzU4MCwidHlwZSI6IlJFRlJFU0gifQ.nmk_DnheG3jzsXE_SPLSiYjfoKw8PO_DTTgkB4zGiPI
 @host=http://localhost:3000
 @userId=62b1499e3bf639f1d3284dd4
 
 POST {{host}}/v1/auth/register
+Content-Type: application/json
 
 {
     "username": "huynguyen",
@@ -13,27 +15,38 @@ POST {{host}}/v1/auth/register
 
 ###
 POST {{host}}/v1/auth/login
+Content-Type: application/json
 
 {
-    "email": "huynguyen1111@gmail.com",
+    "email": "huynguyen3@gmail.com",
     "password": "huynguyen"
 }
 
 ###
 POST {{host}}/v1/auth/logout
+Content-Type: application/json
 
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIwMzg4MzA5MGZjMzU3ZDViZmVmMTYiLCJpYXQiOjE2NTU3NzU4MDMsImV4cCI6MTY1NTc3NjcwMywidHlwZSI6IlJFRlJFU0gifQ.GVEOEJJMwWt27ggKlfB757mqtA-bl7fWZRS5ynEExOc" 
+    "refreshToken": "{{refreshToken}}"
+}
+
+###
+POST {{host}}/refresh-token
+Content-Type: application/json
+
+{
+    "refreshToken": "{{refreshToken}}"
 }
 
 ###
 GET {{host}}/v1/users
-Authorization: Bearer {{token}}
+Authorization: Bearer {{accessToken}}
 
 
 ###
 POST {{host}}/v1/users
-Authorization: Bearer {{token}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
 
 {
     "username": "tynguyen",
@@ -44,12 +57,12 @@ Authorization: Bearer {{token}}
 
 ###
 GET {{host}}/v1/users/{{userId}}
-Authorization: Bearer {{token}}
+Authorization: Bearer {{accessToken}}
 
 
 ###
 PATCH {{host}}/v1/users/{{userId}}
-Authorization: Bearer {{token}}
+Authorization: Bearer {{accessToken}}
 
 {
     "username": "tynguyen123",
@@ -60,4 +73,6 @@ Authorization: Bearer {{token}}
 
 ###
 DELETE {{host}}/v1/users/{{userId}}
-Authorization: Bearer {{token}}
+Authorization: Bearer {{accessToken}}
+
+

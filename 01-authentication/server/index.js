@@ -14,6 +14,7 @@ const port = 3000;
 // Intialize database
 db.init();
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
 

@@ -20,14 +20,20 @@ class AuthController {
   }
 
   async logout(req, res) {
+
+    // Log out users
     await authService.logout(req.body.refreshToken);
     res.status(httpStatus.NO_CONTENT).send();
   }
 
   async refreshTokens(req, res) {
+
+    // Refresh new tokens
     const tokens = await tokenService.refreshAuth(req.body.refreshToken);
     res.send(tokens);
   }
+
+  
 }
 
 module.exports = new AuthController();

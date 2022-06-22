@@ -50,6 +50,7 @@ class AuthService {
       const user = await userService.getUserById(refreshTokenDoc.user);
 
       if (!user) throw new Error();
+      
       await refreshTokenDoc.remove();
 
       return tokenService.generateAuthTokens(user);
