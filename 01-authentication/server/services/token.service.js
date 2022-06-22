@@ -1,7 +1,7 @@
 const moment = require("moment");
 const config = require("../config/config");
 const jwt = require("jsonwebtoken");
-const { Token } = require("../models");
+const { Token, User } = require("../models");
 const ApiError = require("../utils/ApiError");
 const httpStatus = require("http-status");
 
@@ -97,6 +97,35 @@ class TokenService {
     if (!tokenDoc) throw new Error("Token not found");
 
     return tokenDoc;
+  }
+
+  async generateResetPasswordToken(email) {
+    const user = await User.findOne({ email });
+    if (!user)
+      throw new ApiError(
+        httpStatus.NOT_FOUND,
+        "No users found with this email"
+      );
+
+    // Generate reset password token with 10-min expiration
+    const resetPasswordTokenExpires = moment().add(10, "minutes");
+    const resetPasswordToken = this.generateToken(
+      user.id,
+      resetPasswordTokenExpires,
+      "RESET_PASSWORD"
+    );
+
+    await this.saveToken(
+      resetPasswordToken,
+      user.id,
+      resetPasswordTokenExpires,
+      "RESET_PASSWORD"
+    );
+
+    return {
+      user,
+      resetPasswordToken,
+    };
   }
 }
 

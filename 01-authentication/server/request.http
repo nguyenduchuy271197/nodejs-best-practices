@@ -1,4 +1,4 @@
-@accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNTA5NTQ3MzM4ZDg4Y2VjM2EzNDIiLCJpYXQiOjE2NTU4MDI1NTAsImV4cCI6MTY1NTgwMzE1MCwidHlwZSI6IkFDQ0VTUyJ9.zYSbb3bppRZ_85H4sThhbgz536Im4QMaqZUb8P9rnnU
+@accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNTA5NTQ3MzM4ZDg4Y2VjM2EzNDIiLCJpYXQiOjE2NTU4ODY2NjMsImV4cCI6MTY1NTg4NzI2MywidHlwZSI6IkFDQ0VTUyJ9.y8NjIryvdus1ZktEMbALmTtdAypVXpkE4JF0L9be_ok
 @refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNTA5NTQ3MzM4ZDg4Y2VjM2EzNDIiLCJpYXQiOjE2NTU4MDI2ODAsImV4cCI6MTY1NTgwMzU4MCwidHlwZSI6IlJFRlJFU0gifQ.nmk_DnheG3jzsXE_SPLSiYjfoKw8PO_DTTgkB4zGiPI
 @host=http://localhost:3000
 @userId=62b1499e3bf639f1d3284dd4
@@ -31,11 +31,19 @@ Content-Type: application/json
 }
 
 ###
-POST {{host}}/refresh-token
+POST {{host}}/v1/auth/refresh-token
 Content-Type: application/json
 
 {
     "refreshToken": "{{refreshToken}}"
+}
+
+###
+POST {{host}}/v1/auth/forgot-password
+Content-Type: application/json
+
+{
+    "email": "huynguyen3@gmail.com"
 }
 
 ###

@@ -19,7 +19,7 @@ const TokenSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["REFRESH"],
+      enum: ["REFRESH", "RESET_PASSWORD"],
       default: "REFRESH",
     },
     blacklisted: {

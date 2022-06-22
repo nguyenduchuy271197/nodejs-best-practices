@@ -7,6 +7,7 @@ module.exports = {
     uri: process.env.DB_URI,
   },
   env: process.env.NODE_ENV || "development",
+  localhost: process.env.LOCAL_HOST,
   email: {
     smtp: {
       host: process.env.SMTP_HOST,
