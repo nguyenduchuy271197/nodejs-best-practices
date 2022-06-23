@@ -3,6 +3,7 @@ const { User, Token } = require("../models");
 const ApiError = require("../utils/ApiError");
 const tokenService = require("./token.service");
 const userService = require("./user.service");
+const tokenTypes = require("../config/tokens");
 
 class AuthService {
   /**
@@ -30,7 +31,7 @@ class AuthService {
   async logout(refreshToken) {
     const refreshTokenDoc = await Token.findOne({
       token: refreshToken,
-      type: "REFRESH",
+      type: tokenTypes.REFRESH,
       blacklisted: false,
     });
     if (!refreshTokenDoc) {
@@ -46,7 +47,10 @@ class AuthService {
    */
   async refreshAuth(refreshToken) {
     try {
-      const refreshTokenDoc = tokenService.verifyToken(refreshToken, "REFRESH");
+      const refreshTokenDoc = tokenService.verifyToken(
+        refreshToken,
+        tokenTypes.REFRESH
+      );
       const user = await userService.getUserById(refreshTokenDoc.user);
 
       if (!user) throw new Error();
@@ -67,12 +71,13 @@ class AuthService {
    */
   async resetPassword(resetPasswordToken, newPassword) {
     try {
-      const resetPasswordTokenDoc = tokenService.verifyToken(
+      const resetPasswordTokenDoc = await tokenService.verifyToken(
         resetPasswordToken,
-        "RESET_PASSWORD"
+        tokenTypes.RESET_PASSWORD
       );
-
+      console.log("RESET", resetPasswordTokenDoc);
       const user = await userService.getUserById(resetPasswordTokenDoc.user);
+      console.log("USER", user);
 
       if (!user) throw new Error();
 
@@ -80,35 +85,38 @@ class AuthService {
         password: newPassword,
       });
 
-      await Token.deleteMany({ user: user.id, type: "RESET_PASSWORD" });
+      await Token.deleteMany({
+        user: user.id,
+        type: tokenTypes.RESET_PASSWORD,
+      });
     } catch (error) {
       throw new ApiError(httpStatus.UNAUTHORIZED, "Password reset failed");
     }
   }
 
   /**
-   * Reset password
-   * @param {string} refreshToken
+   * Verify email
+   * @param {string} verifyEmailToken
    * @returns {Object}
    */
-  async resetPassword(resetPasswordToken, newPassword) {
+  async verifyEmail(verifyEmailToken) {
     try {
-      const resetPasswordTokenDoc = tokenService.verifyToken(
-        resetPasswordToken,
-        "RESET_PASSWORD"
+      const verifyEmailTokenDoc = tokenService.verifyToken(
+        verifyEmailToken,
+        tokenTypes.VERIFY_EMAIL
       );
 
-      const user = await userService.getUserById(resetPasswordTokenDoc.user);
+      const user = await userService.getUserById(verifyEmailTokenDoc.user);
 
       if (!user) throw new Error();
 
-      await userService.updateUserById(resetPasswordTokenDoc.user, {
-        password: newPassword,
+      await userService.updateUserById(verifyEmailTokenDoc.user, {
+        isEmailVerified: true,
       });
 
-      await Token.deleteMany({ user: user.id, type: "RESET_PASSWORD" });
+      await Token.deleteMany({ user: user.id, type: tokenTypes.VERIFY_EMAIL });
     } catch (error) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, "Password reset failed");
+      throw new ApiError(httpStatus.UNAUTHORIZED, "Email verification failed");
     }
   }
 }

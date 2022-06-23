@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { toJSON } = require("./plugins");
+const tokenTypes = require("../config/tokens");
 
 const TokenSchema = mongoose.Schema(
   {
@@ -19,8 +20,12 @@ const TokenSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["REFRESH", "RESET_PASSWORD"],
-      default: "REFRESH",
+      enum: [
+        tokenTypes.REFRESH,
+        tokenTypes.RESET_PASSWORD,
+        tokenTypes.VERIFY_EMAIL,
+      ],
+      default: tokenTypes.REFRESH,
     },
     blacklisted: {
       type: Boolean,

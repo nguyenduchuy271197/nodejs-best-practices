@@ -1,35 +1,38 @@
-require("dotenv").config();
-require("express-async-errors");
-const express = require("express");
-const cors = require("cors");
-const passport = require("passport");
-const { jwtStrategy } = require("./config/passport");
-const db = require("./config/db");
-const routes = require("./routes");
-const { errorHandler, errorConverter } = require("./middlewares/error");
+const mongoose = require("mongoose");
+const app = require("./app");
+const config = require("./config/config");
+const logger = require("./config/logger");
 
-const app = express();
-const port = 3000;
+let server;
+mongoose.connect(config.db.uri).then(() => {
+  logger.info("Connected to MongoDB");
+  server = app.listen(config.port, () => {
+    logger.info(`Listening to port ${config.port}`);
+  });
+});
 
-// Intialize database
-db.init();
+const exitHandler = () => {
+  if (server) {
+    server.close(() => {
+      logger.info("Server closed");
+      process.exit(1);
+    });
+  } else {
+    process.exit(1);
+  }
+};
 
-// Middlewares
-app.use(cors());
-app.use(express.json());
+const unexpectedErrorHandler = (error) => {
+  logger.error(error);
+  exitHandler();
+};
 
-// jwt authentication
-app.use(passport.initialize());
-passport.use("jwt", jwtStrategy);
+process.on("uncaughtException", unexpectedErrorHandler);
+process.on("unhandledRejection", unexpectedErrorHandler);
 
-// Routes
-app.use("/v1/auth", routes.authRoute);
-app.use("/v1/users", routes.userRoute);
-
-// Error Handler
-app.use(errorConverter);
-app.use(errorHandler);
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+process.on("SIGTERM", () => {
+  logger.info("SIGTERM received");
+  if (server) {
+    server.close();
+  }
 });

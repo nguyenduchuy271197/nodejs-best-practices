@@ -16,16 +16,15 @@ class EmailService {
   }
 
   async newTransport() {
-    const testAccount = await this.testAccount();
-    console.log(testAccount);
+    // const testAccount = await this.testAccount();
 
     return nodemailer.createTransport({
       host: "smtp.ethereal.email",
       port: 587,
       secure: false, // true for 465, false for other ports
       auth: {
-        user: testAccount.user, // generated ethereal user
-        pass: testAccount.pass, // generated ethereal password
+        user: "jape6h5spo6klvwz@ethereal.email" || testAccount.user, // generated ethereal user
+        pass: "kSfgck6WaGv77qXnQY" || testAccount.pass, // generated ethereal password
       },
     });
   }
@@ -35,7 +34,7 @@ class EmailService {
     const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
       name: this.name,
       subject,
-      url: `${config.localhost}/reset-password?token=${this.token}`,
+      url: `${config.localhost}/v1/auth/reset-password?token=${this.token}`,
     });
     // Create mailOptions
     const mailOptions = {

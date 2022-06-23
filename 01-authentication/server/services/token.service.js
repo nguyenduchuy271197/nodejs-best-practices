@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const { Token, User } = require("../models");
 const ApiError = require("../utils/ApiError");
 const httpStatus = require("http-status");
+const tokenTypes = require("../config/tokens");
 
 class TokenService {
   /**
@@ -55,7 +56,7 @@ class TokenService {
     const accessToken = this.generateToken(
       user.id,
       accessTokenExpires,
-      "ACCESS"
+      tokenTypes.ACCESS
     );
 
     // Generate refresh token with 15-min expiration
@@ -63,10 +64,15 @@ class TokenService {
     const refreshToken = this.generateToken(
       user.id,
       refreshTokenExpires,
-      "REFRESH"
+      tokenTypes.REFRESH
     );
 
-    await this.saveToken(refreshToken, user.id, refreshTokenExpires, "REFRESH");
+    await this.saveToken(
+      refreshToken,
+      user.id,
+      refreshTokenExpires,
+      tokenTypes.REFRESH
+    );
 
     return {
       access: {
@@ -82,7 +88,8 @@ class TokenService {
 
   /**
    * Verify token
-   * @param {Object} user
+   * @param {String} token
+   * @param {String} type
    * @returns {Object}
    */
   async verifyToken(token, type) {
@@ -112,20 +119,41 @@ class TokenService {
     const resetPasswordToken = this.generateToken(
       user.id,
       resetPasswordTokenExpires,
-      "RESET_PASSWORD"
+      tokenTypes.RESET_PASSWORD
     );
 
     await this.saveToken(
       resetPasswordToken,
       user.id,
       resetPasswordTokenExpires,
-      "RESET_PASSWORD"
+      tokenTypes.RESET_PASSWORD
     );
 
     return {
       user,
       resetPasswordToken,
     };
+  }
+
+  async generateVerifyEmailToken(email) {
+    const user = await User.findOne({ email });
+
+    // Generate reset password token with 10-min expiration
+    const verifyEmailTokenExpires = moment().add(10, "minutes");
+    const verifyEmailToken = this.generateToken(
+      user.id,
+      verifyEmailTokenExpires,
+      tokenTypes.VERIFY_EMAIL
+    );
+
+    await this.saveToken(
+      verifyEmailToken,
+      user.id,
+      verifyEmailTokenExpires,
+      tokenTypes.VERIFY_EMAIL
+    );
+
+    return { user, verifyEmailToken };
   }
 }
 

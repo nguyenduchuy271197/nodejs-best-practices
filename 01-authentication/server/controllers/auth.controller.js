@@ -36,7 +36,7 @@ class AuthController {
     // Get token for resetting password
     const { user, resetPasswordToken } =
       await tokenService.generateResetPasswordToken(req.body.email);
-
+    console.log(resetPasswordToken);
     // Send the mail for resetting password
     await new EmailService(user).sendPasswordResetToken(resetPasswordToken);
 
@@ -44,14 +44,14 @@ class AuthController {
   }
 
   async resetPassword(req, res) {
-    await authService.resetPassword(req.params.token, req.body.password);
+    await authService.resetPassword(req.query.token, req.body.password);
     res.status(httpStatus.NO_CONTENT).send();
   }
 
   async sendVerificationEmail(req, res) {
     // Get token for resetting password
     const { user, sendVerificationToken } =
-      await tokenService.generateResetPasswordToken(req.body.email);
+      await tokenService.generateVerifyEmailToken(req.body.email);
 
     // Send the mail for resetting password
     await new EmailService(user).sendVerificationEmail(sendVerificationToken);
@@ -61,6 +61,8 @@ class AuthController {
 
   async verifyEmail(req, res) {
     await authService.verifyEmail(req.params.token);
+
+    res.status(httpStatus.NO_CONTENT).send();
   }
 }
 
