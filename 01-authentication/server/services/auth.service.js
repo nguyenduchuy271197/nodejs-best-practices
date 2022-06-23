@@ -61,6 +61,33 @@ class AuthService {
 
   /**
    * Reset password
+   * @param {string} resetPasswordToken
+   * @param {string} newPassword
+   * @returns {Object}
+   */
+  async resetPassword(resetPasswordToken, newPassword) {
+    try {
+      const resetPasswordTokenDoc = tokenService.verifyToken(
+        resetPasswordToken,
+        "RESET_PASSWORD"
+      );
+
+      const user = await userService.getUserById(resetPasswordTokenDoc.user);
+
+      if (!user) throw new Error();
+
+      await userService.updateUserById(resetPasswordTokenDoc.user, {
+        password: newPassword,
+      });
+
+      await Token.deleteMany({ user: user.id, type: "RESET_PASSWORD" });
+    } catch (error) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, "Password reset failed");
+    }
+  }
+
+  /**
+   * Reset password
    * @param {string} refreshToken
    * @returns {Object}
    */

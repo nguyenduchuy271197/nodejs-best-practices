@@ -54,7 +54,7 @@ class AuthController {
       await tokenService.generateResetPasswordToken(req.body.email);
 
     // Send the mail for resetting password
-    await new EmailService(user).sendVerificationCode(sendVerificationToken);
+    await new EmailService(user).sendVerificationEmail(sendVerificationToken);
 
     res.status(httpStatus.NO_CONTENT).send();
   }
