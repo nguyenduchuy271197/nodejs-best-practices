@@ -1,8 +1,8 @@
-@accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNTA5NTQ3MzM4ZDg4Y2VjM2EzNDIiLCJpYXQiOjE2NTU5NDk5NDQsImV4cCI6MTY1NTk1MDU0NCwidHlwZSI6IkFDQ0VTUyJ9.R7LKliRk8WW365vB7FQWXmHrlNwbKo-fvjI3HKV9wq8
+@accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNTA5NTQ3MzM4ZDg4Y2VjM2EzNDIiLCJpYXQiOjE2NTU5NTU4MzUsImV4cCI6MTY1NTk1NjQzNX0.xF1sncXv0fusS3GG0IEcObH2ygDkfpoH1UC9FzAIQTA
 @refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNTA5NTQ3MzM4ZDg4Y2VjM2EzNDIiLCJpYXQiOjE2NTU4MDI2ODAsImV4cCI6MTY1NTgwMzU4MCwidHlwZSI6IlJFRlJFU0gifQ.nmk_DnheG3jzsXE_SPLSiYjfoKw8PO_DTTgkB4zGiPI
 @resetPasswordToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxNTA5ODQ3MzM4ZDg4Y2VjM2EzNDUiLCJpYXQiOjE2NTU5NTE5NDgsImV4cCI6MTY1NTk1MjU0OCwidHlwZSI6IlJFU0VUX1BBU1NXT1JEIn0.mXX_z3m-yN213bf6BBFKRFFJzchfrHUtqjHkOG9x23M
 @host=http://localhost:3000
-@userId=62b1499e3bf639f1d3284dd4
+@userId=62b3e1a753d84d3c97ba2a47
 
 POST {{host}}/v1/auth/register
 Content-Type: application/json
@@ -67,7 +67,7 @@ Content-Type: application/json
 
 {
     "username": "tynguyen",
-    "email": "tynguyen@gmail.com",
+    "email": "tynguyen123@gmail.com",
     "password": "tynguyen",
     "role": "user"
 }
